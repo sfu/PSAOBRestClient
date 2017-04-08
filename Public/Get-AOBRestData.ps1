@@ -39,10 +39,10 @@
 
     [cmdletbinding()]
     param(
-        [string]$Object,
-        [string]$Uri = 'https://rest.its.sfu.ca/cgi-bin/WebObjects/AOBRestServer.woa/rest',
-        [string]$AuthToken,  
-        [Hashtable]$Body
+        [parameter(Mandatory=$true)] [string]$Object,
+        [parameter(Mandatory=$false)][string]$Uri = 'https://rest.its.sfu.ca/cgi-bin/WebObjects/AOBRestServer.woa/rest',
+        [parameter(Mandatory=$true)] [string]$AuthToken,  
+        [parameter(Mandatory=$false)][Hashtable]$Body
     )
 
     #Build up URI

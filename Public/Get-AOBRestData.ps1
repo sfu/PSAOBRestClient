@@ -31,9 +31,9 @@
     .LINK
         https://github.com/sfu/PSAOBRestClient
     .LINK
-        Get-AOBRestUserBio
+        Get-AOBRestUser
     .LINK
-        Get-AOBRestMembesOfMaillist
+        Get-AOBRestMembersOfMaillist
     #>
 
 

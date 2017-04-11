@@ -31,30 +31,44 @@
 
     [cmdletbinding()]
     param(
-        [parameter(Mandatory=$true)] [string]$Username,
+        [parameter(Mandatory=$true, ValueFromPipeline=$true)] [string]$Username,
         [parameter(Mandatory=$false)][string]$Uri,
         [parameter(Mandatory=$true)] [string]$AuthToken  
     )
 
-    # This should support pipelining so we can handle multiple users
-    # but we're not there yet.
-
-    $Object = 'datastore2/global/userBio.js'
-    $Body = @{
-            username = $Username
-            }      
-
-    Write-Debug ( "Running $($MyInvocation.MyCommand).`n" +
-                    "PSBoundParameters:$( $PSBoundParameters | Format-List | Out-String)")
-
-    Try 
+    Begin 
     {
-        $User = Get-AOBRestData -Object $Object $Uri -AuthToken $AuthToken -Body $Body
+        $Object = 'datastore2/global.js'
     }
-    Catch 
+
+    Process 
     {
-        Throw $_
+        $Body = @{
+                username = $Username
+                }      
+
+        Write-Debug ( "Running $($MyInvocation.MyCommand).`n" +
+                        "PSBoundParameters:$( $PSBoundParameters | Format-List | Out-String)")
+
+        Try 
+        {
+            $User = Get-AOBRestData -Object $Object $Uri -AuthToken $AuthToken -Body $Body
+        }
+        Catch 
+        {
+            # Write a "user not found" error to STDERR and continue on
+            if ($_.toString() -Match "There is no account")
+            {
+                Write-Error "No such user: $Username"
+                Write-Error $_
+            }
+            # All other errors, abort the pipeline
+            else
+            {
+                Throw $_
+            }
+        }
+        $User
     }
-    $User
 
 }

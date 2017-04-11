@@ -53,6 +53,8 @@
          Authorization = "Bearer "+$AuthToken
     }
 
+    $Body.Add("art",$AuthToken)
+
     #Build up Invoke-RestMethod
     $IRMParams = @{
         ErrorAction = 'Stop'

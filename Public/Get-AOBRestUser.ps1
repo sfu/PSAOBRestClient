@@ -32,26 +32,29 @@
     [cmdletbinding()]
     param(
         [parameter(Mandatory=$true)] [string]$Username,
-        [parameter(Mandatory=$false)][string]$Uri = 'https://rest.its.sfu.ca/cgi-bin/WebObjects/AOBRestServer.woa/rest',
+        [parameter(Mandatory=$false)][string]$Uri,
         [parameter(Mandatory=$true)] [string]$AuthToken  
     )
 
     # This should support pipelining so we can handle multiple users
     # but we're not there yet.
 
-    $Object = 'global/userBio.js'
+    $Object = 'datastore2/global/userBio.js'
     $Body = @{
             username = $Username
-            }
+            }      
 
+    Write-Debug ( "Running $($MyInvocation.MyCommand).`n" +
+                    "PSBoundParameters:$( $PSBoundParameters | Format-List | Out-String)")
 
     Try 
     {
-        $User = Get-AOBRestData -Object $Object -AuthToken $AuthToken -Body $Body
+        $User = Get-AOBRestData -Object $Object $Uri -AuthToken $AuthToken -Body $Body
     }
     Catch 
     {
         Throw $_
     }
+    $User
 
 }

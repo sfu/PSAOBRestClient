@@ -6,6 +6,9 @@
         Get Members of a Maillist from the AOB Rest Server
     .PARAMETER Maillist
        Maillist to fetch members from
+    .PARAMETER Member
+        If specified, return true if Member is a member of Maillist. False otherwise. Member may be either a local username
+        or a full email address
     .PARAMETER AuthToken
         Rest Server Auth Token ("art")
     .PARAMETER Uri
@@ -29,6 +32,7 @@
     [cmdletbinding()]
     param(
         [parameter(Mandatory=$true)] [string]$Maillist,
+        [parameter(Mandatory=$false)][string]$Member,
         [parameter(Mandatory=$false)][string]$Uri,
         [parameter(Mandatory=$true)] [string]$AuthToken,
         [parameter(Mandatory=$false)][switch]$localOnly 
@@ -38,10 +42,20 @@
     # but we're not there yet.
 
     $Object = 'maillist/members.js'
-    $Body = @{
+
+    if ($Member)
+    {
+        $Body = @{
+            listname = $Maillist,
+            address = $Member
+        }
+    }
+    else {
+        $Body = @{
             listname = $Maillist
             }      
-
+    }
+    
     Write-Debug ( "Running $($MyInvocation.MyCommand).`n" +
                     "PSBoundParameters:$( $PSBoundParameters | Format-List | Out-String)")
 
@@ -54,13 +68,17 @@
         Throw $_
     }
     
-    # If the user only wants local SFU users, push them into an array
-    # Caveat: Dynamically resizing an array in PS is apparently a performance pig
-    # so we'll run our for loop twice - once to calculate how many members we
-    # have and once to populate
-
-    if ($localOnly)
+    # If passed in a member, return true/false based on membership in the list
+    if ($Member)
     {
+        $Members -contains $Member
+    }
+    elseif ($localOnly)
+    {
+        # If the user only wants local SFU users, push them into an array
+        # Caveat: Dynamically resizing an array in PS is apparently a performance pig
+        # so we'll run our for loop twice - once to calculate how many members we
+        # have and once to populate
         $count=0
         $passes=0
         $localmembers=0

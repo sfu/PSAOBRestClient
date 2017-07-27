@@ -61,7 +61,14 @@
 
     Try 
     {
-        $Members = Get-AOBRestData -Object $Object $Uri -AuthToken $AuthToken -Body $Body
+        if ($Uri)
+        {
+            $Members = Get-AOBRestData -Object $Object -Uri $Uri -AuthToken $AuthToken -Body $Body
+        }
+        else 
+        {
+            $Members = Get-AOBRestData -Object $Object -AuthToken $AuthToken -Body $Body
+        }
     }
     Catch 
     {

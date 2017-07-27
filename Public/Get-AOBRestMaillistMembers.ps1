@@ -46,8 +46,8 @@
     if ($Member)
     {
         $Body = @{
-            listname = $Maillist,
-            address = $Member
+            "listname" = $Maillist;
+            "address" = $Member
         }
     }
     else {

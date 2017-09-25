@@ -38,7 +38,7 @@
 
     Begin 
     {
-        $Object = 'datastore2/userBio.js'
+        $Object = 'datastore2/global/userBio.js'
     }
 
     Process 

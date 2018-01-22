@@ -79,7 +79,7 @@
                 Throw $_
             }
         }
-        $User | Add-member –MemberTypeNoteProperty –Name preferredEmail –Value $User2.preferredEmail
+        $User | Add-member preferredEmail $User2.preferredEmail
         $User
     }
 

@@ -42,7 +42,7 @@
         [parameter(Mandatory=$true)] [string]$Object,
         [parameter(Mandatory=$false)][string]$Uri = 'https://rest.its.sfu.ca/cgi-bin/WebObjects/AOBRestServer.woa/rest',
         [parameter(Mandatory=$true)] [string]$AuthToken,  
-        [parameter(Mandatory=$false)][Hashtable]$Private:Body
+        [parameter(Mandatory=$false)][Hashtable]$Body
     )
 
     #Build up URI
@@ -53,7 +53,8 @@
          Authorization = "Bearer "+$AuthToken
     }
 
-    $Private:Body.Add("art",$AuthToken)
+    $_Body = $Body
+    $_Body.Add("art",$AuthToken)
 
     #Build up Invoke-RestMethod
     $IRMParams = @{
@@ -61,7 +62,7 @@
         Uri = $BaseUri
         Method = 'Get'
         Headers = $Headers
-        Body = $Private:Body
+        Body = $_Body
     }
 
     Write-Debug ( "Running $($MyInvocation.MyCommand).`n" +

@@ -53,7 +53,7 @@
          Authorization = "Bearer "+$AuthToken
     }
 
-    $_Body = $Body
+    $_Body = $Body.PSObject.Copy()
     $_Body.Add("art",$AuthToken)
 
     #Build up Invoke-RestMethod

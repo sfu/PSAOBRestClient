@@ -39,6 +39,7 @@
     Begin 
     {
         $Object = 'datastore2/global/userBio.js'
+        $Object2 = 'datastore2/global/accountInfo.js'
     }
 
     Process 
@@ -55,10 +56,13 @@
             if ($Uri)
             {
                 $User = Get-AOBRestData -Object $Object -Uri $Uri -AuthToken $AuthToken -Body $Body
+                $User2 = Get-AOBRestData -Object $Object2 -Uri $Uri -AuthToken $AuthToken -Body $Body
+
             }
             else 
             {
                 $User = Get-AOBRestData -Object $Object -AuthToken $AuthToken -Body $Body
+                $User2 = Get-AOBRestData -Object $Object2 -AuthToken $AuthToken -Body $Body
             }
         }
         Catch 
@@ -75,6 +79,7 @@
                 Throw $_
             }
         }
+        $User | Add-member –MemberTypeNoteProperty –Name preferredEmail –Value $User2.preferredEmail
         $User
     }
 
